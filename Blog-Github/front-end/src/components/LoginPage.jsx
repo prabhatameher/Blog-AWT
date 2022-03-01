@@ -25,7 +25,7 @@ const LoginPage = () => {
             }
         }).then(() => {
             setLoading(true)
-             navigate('/Homepage')
+             navigate('/homepage')
             window.location.reload()
         }).catch((error) => console.error(error))
     }

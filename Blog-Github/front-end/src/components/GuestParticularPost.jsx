@@ -5,21 +5,21 @@ import axios from 'axios'
 import { formatDistance } from 'date-fns'
 import { useNavigate, useParams } from "react-router-dom";
 
-const ParticularPost = (props) => {
-    const { name, token, email } = props.user
+const GuestParticularPost = () => {
+
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [post, setPost] = useState()
     const { id } = useParams()
     console.log("Post ID ::", id)
     console.log("Post ::", post)
-    const navigate = useNavigate()
 
 
     useEffect(() => {
         setLoading(true)
-        axios.post('http://localhost:5000/api/posts/specific-post', {
+        axios.post('http://localhost:5000/api/posts/specific-post-guest', {
             postId: id,
-        }, { headers: { "Authorization": `Bearer ${token}` } })
+        })
             .then((resp) => {
                 console.log(resp.data)
                 setPost(resp.data)
@@ -28,27 +28,20 @@ const ParticularPost = (props) => {
 
     }, [id])
 
-    const logout = () => {
-        localStorage.removeItem('user')
-        // window.reload()
-    }
-
 
 
     return (
         <>
-            {/* Header */}
             <Box width='100%' height='80px' bgcolor='yellow' display='flex' alignItems='center' justifyContent='space-between' style={{ position: 'fixed', top: 0, zIndex: 2 }} >
-                <Box style={{ fontWeight: 'bold', fontSize: '1.6rem', cursor: 'pointer' }} mx={5} onClick={() => navigate('/homepage')}>Blogs Stacks</Box>
+                <Box style={{ fontWeight: 'bold', fontSize: '1.6rem', cursor: "pointer" }} mx={5} onClick={() => navigate('/guest-homepage')}>Blogs Stacks</Box>
                 <Box mx={2} justifyContent='flex-end'>
-                    <Box fontSize={25} fontWeight={200}>Welcome {name}</Box>
+                    <Box fontSize={25} fontWeight={200}>Guest User</Box>
                     <Box display='flex' justifyContent='space-between'>
-                        <Box fontSize={12} fontWeight={200} mx={1}>{email} </Box>
-                        <Box fontSize={12} fontWeight={200} onClick={logout} style={{ cursor: 'pointer' }}><a href='/guest-homepage' style={{ textDecoration: 'none' }}>Logout</a></Box>
+                        <Box fontSize={12} fontWeight={200} style={{ cursor: 'pointer' }}><a href='/login' style={{ textDecoration: 'none' }}>Sign in</a></Box>
                     </Box>
                 </Box>
             </Box>
-            <Box style={{ position: 'absolute', top: 100, zIndex: 1 }} width='100%'>
+            <Box style={{ position: 'absolute', top: 120, zIndex: 1 }} width='100%'>
                 {loading ? <Box display='flex' justifyContent='center' height='100vh' alignItems='center' width='100%'> <CircularProgress size='100px' /> </Box> : (
                     <>
                         {post ?
@@ -62,10 +55,10 @@ const ParticularPost = (props) => {
                                             { includeSeconds: true }
                                         )} ago</Box>
                                     </Box>
-                                    <Box fontSize={15} fontWeight={400} textAlign='justify'>{post.description}</Box>
+                                    <Box fontSize={15} fontWeight={300} textAlign='justify'>{post.description}</Box>
                                 </Box>
                             </Box>
-                            : <Box display='flex' height='100vh' flexDirection='row' justifyContent='center' alignItems='center' color='crimson' fontSize={20}  >Post either Deleted or Invalid</Box>}
+                            : <Box display='flex' height='80vh' flexDirection='row' justifyContent='center' alignItems='center' color='crimson' fontSize={20}  >Post either Deleted or Invalid</Box>}
                     </>
                 )}
             </Box>
@@ -73,4 +66,4 @@ const ParticularPost = (props) => {
     )
 }
 
-export default ParticularPost
+export default GuestParticularPost

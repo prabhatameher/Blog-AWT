@@ -7,6 +7,10 @@ const postSchema = mongoose.Schema(
             require: true,
             ref: 'User'
         },
+        userName: {
+            type: String,
+            require:true,
+        },
         title: {
             type: String,
             require: [true, "Please add a title"]
@@ -14,6 +18,10 @@ const postSchema = mongoose.Schema(
         description: {
             type: String,
             require: [true, "Please add a description"]
+        },
+        postType: {
+            type: String,
+            require: [true, "Please add post Type"]
         },
     },
     {
