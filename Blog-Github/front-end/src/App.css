@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,22 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+
+.wrapper-class {
+  /* padding: 1rem; */
+  /* border: 1px solid #ccc; */
+  width: 75vw;
+}
+.editor-class {
+  /* background-color:lightgray; */
+  padding: 1rem;
+  border: 1px solid #ccc;
+  height: 50vh;
+}
+.toolbar-class {
+  background-color:lightgray;
+  border: 1px solid #ccc;
+  height: auto;
 }

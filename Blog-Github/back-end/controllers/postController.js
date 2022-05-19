@@ -47,9 +47,6 @@ const getSinglePost = asyncHandler(async (req, res) => {
 
     const specificPost = await Post.findOne({ _id: req.body.postId })
 
-    const updatePost = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
-
-
     console.log(specificPost)
 
     res.status(200).json(specificPost)
@@ -136,10 +133,130 @@ const deletePost = asyncHandler(async (req, res) => {
     }
 
     await post.remove()
-    await res.status(200).json({'message':'Post deleted Successfully'})
-
+    await res.status(200).json({ 'message': 'Post deleted Successfully' })
 
 })
+
+
+const commentPost = asyncHandler(async (req, res) => {
+    const post = await Post.findById(req.params.id)
+    const { userId, name, comment } = req.body
+
+    if (!post) {
+        res.status(400)
+        throw new Error('Post not Found')
+    }
+
+    const user = await User.findById(userId)
+
+    //check for user
+    if (!user) {
+        res.status(401)
+        throw new Error('User Not found')
+    }
+
+    // const postComment = await Post.findByIdAndUpdate(req.params.id, { $addToSet: { comments: { userId: userId, name: name, comment: comment } } })
+
+    // can also be written as 
+    const postComment = await Post.findByIdAndUpdate(req.params.id, { $addToSet: { comments: { userId, name, comment } } })
+
+    res.status(200).json(postComment)
+
+})
+const likePost = asyncHandler(async (req, res) => {
+    const post = await Post.findById(req.params.id)
+    const { userId } = req.body
+
+    if (!post) {
+        res.status(400)
+        throw new Error('Post not Found')
+    }
+
+    const user = await User.findById(userId)
+
+    //check for user
+    if (!user) {
+        res.status(401)
+        throw new Error('User Not found')
+    }
+
+    const postLike = await Post.findByIdAndUpdate(req.params.id, { $addToSet: { likes: userId } })
+
+    res.status(200).json(postLike)
+
+})
+
+const removeLikedPost = asyncHandler(async (req, res) => {
+    const post = await Post.findById(req.params.id)
+    const { userId } = req.body
+
+    if (!post) {
+        res.status(400)
+        throw new Error('Post not Found')
+    }
+
+    const user = await User.findById(userId)
+
+    //check for user
+    if (!user) {
+        res.status(401)
+        throw new Error('User Not found')
+    }
+
+    const postSave = await Post.findByIdAndUpdate(req.params.id, { $pull: { likes: userId } })
+
+    res.status(200).json(postSave)
+
+})
+
+
+const savePost = asyncHandler(async (req, res) => {
+    const post = await Post.findById(req.params.id)
+    const { userId } = req.body
+
+    if (!post) {
+        res.status(400)
+        throw new Error('Post not Found')
+    }
+
+    const user = await User.findById(userId)
+
+    //check for user
+    if (!user) {
+        res.status(401)
+        throw new Error('User Not found')
+    }
+
+    const postSave = await Post.findByIdAndUpdate(req.params.id, { $addToSet: { saved: userId } })
+
+    res.status(200).json(postSave)
+
+})
+
+const removeSavedPost = asyncHandler(async (req, res) => {
+    const post = await Post.findById(req.params.id)
+    const { userId } = req.body
+
+    if (!post) {
+        res.status(400)
+        throw new Error('Post not Found')
+    }
+
+    const user = await User.findById(userId)
+
+    //check for user
+    if (!user) {
+        res.status(401)
+        throw new Error('User Not found')
+    }
+
+    const postSave = await Post.findByIdAndUpdate(req.params.id, { $pull: { saved: userId } })
+
+    res.status(200).json(postSave)
+
+})
+
+
 
 module.exports = {
     getPublicPosts,
@@ -148,5 +265,10 @@ module.exports = {
     setPost,
     getSinglePost,
     updatePost,
-    deletePost
+    deletePost,
+    commentPost,
+    likePost,
+    savePost,
+    removeSavedPost,
+    removeLikedPost,
 }

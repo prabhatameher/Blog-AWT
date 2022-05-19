@@ -9,7 +9,7 @@ const postSchema = mongoose.Schema(
         },
         userName: {
             type: String,
-            require:true,
+            require: true,
         },
         title: {
             type: String,
@@ -23,6 +23,18 @@ const postSchema = mongoose.Schema(
             type: String,
             require: [true, "Please add post Type"]
         },
+        comments: {
+            type: Array,
+            "default": []
+        },
+        likes: {
+            type: Array,
+            "default": []
+        },
+        saved: {
+            type: Array,
+            "default": []
+        }
     },
     {
         timestamps: true
